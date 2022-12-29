@@ -212,7 +212,8 @@ func (cdp *ConsulDataplane) Run(ctx context.Context) error {
 		case <-ctx.Done():
 			doneCh <- nil
 		case <-proxy.Exited():
-			doneCh <- errors.New("envoy proxy exited unexpectedly")
+			cdp.logger.Info("envoy proxy exited")
+			doneCh <- nil
 		case <-cdp.xdsServerExited():
 			if err := proxy.Stop(); err != nil {
 				cdp.logger.Error("failed to stop proxy", "error", err)
